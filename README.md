@@ -14,10 +14,10 @@ Mistune allowed me to wrestle the output HTML in a way that I can override what 
 
 I don't know why in 2020 everything we write in a browser, doesn't support Markdown as a base format, but that's a discussion for another time...
 
-To use this, simply take one of your articles in Markdown format, and pass it as an argument to markdown2salesforce.py. It will transform the markdown into a modified format of HTML that Salesforce can ingest and render in its own Knowledgebase system. 
+To use this, simply take one of your articles in Markdown format, and pass it as an argument to md2sf.py. It will transform the markdown into a modified format of HTML that Salesforce can ingest and render in its own Knowledgebase system. 
 
 ```bash
-./markdown2salesforce.py sample.md
+./md2sf.py sample.md
 ```
 
 The input .md file you pass in (sample.md in the above example), will be saved back as the same base filename with a .html extension.
