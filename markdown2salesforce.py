@@ -8,15 +8,20 @@ import mistune
 from mistune.scanner import escape
 
 
-###############################################
-class MyRenderer(mistune.HTMLRenderer):
+class sf_html_render(mistune.HTMLRenderer):
+    # This is a custom mistune extension that will override the default
+    # behavior of several inline block element handlers to allow them to emit
+    # the HTML needed by Saleforce's Knowledge system
     def codespan(self, text):
+        """override the default `code` block handler"""
         return '<code style="font-size:1em;color:#00f;">' + escape(text) + "</code>"
 
     def paragraph(self, text):
+        """override the default paragraph handler"""
         return "<p>" + text + "</p>\n"
 
     def block_code(self, code, info=None):
+        """inject the correct `code` block handlers for styling"""
         html = '<pre class="ckeditor_codeblock"'
         if info is not None:
             info = info.strip()
@@ -30,10 +35,10 @@ def main(filename):
     with open(filename) as sf_kb:
         sf_kb_file = sf_kb.read()
 
-    markdown = mistune.create_markdown(renderer=MyRenderer())
+    markdown = mistune.create_markdown(renderer=sf_html_render())
 
-    f = open(os.path.splitext(filename)[0] + ".html", "w")
-    f.write(markdown(sf_kb_file))
+    sf_html = open(os.path.splitext(filename)[0] + ".html", "w")
+    sf_html.write(markdown(sf_kb_file))
 
 
 if __name__ == "__main__":
