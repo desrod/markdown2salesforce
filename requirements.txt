@@ -3,3 +3,4 @@ black
 isort
 pyflakes
 click
+python-magic
