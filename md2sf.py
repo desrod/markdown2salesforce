@@ -7,7 +7,7 @@ import click
 import mistune
 from mistune.scanner import escape
 import base64
-import magic
+import puremagic as magic
 
 class sf_html_render(mistune.HTMLRenderer):
     # This is a custom mistune extension that will override the default
