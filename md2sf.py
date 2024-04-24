@@ -5,7 +5,7 @@ import os
 
 import click
 import mistune
-from mistune import escape
+from mistune.util import escape
 
 
 class sf_html_render(mistune.HTMLRenderer):
