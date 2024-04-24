@@ -44,7 +44,7 @@ class sf_html_render(mistune.HTMLRenderer):
 
     def _get_mime_type(self, url):
         """Lazy-load magic here since it's only used once, faster import loading"""
-        import magic
+        import puremagic as magic
 
         return magic.from_file(url, mime=True)
 

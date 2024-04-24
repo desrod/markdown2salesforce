@@ -3,4 +3,4 @@ black
 isort
 pyflakes
 click
-python-magic
+puremagic==1.21
