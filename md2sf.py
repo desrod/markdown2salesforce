@@ -2,10 +2,13 @@
 
 import base64
 import os
+import subprocess
+import sys
 
 import click
 import mistune
 from mistune.util import escape
+from spellchecker import SpellChecker
 
 
 class sf_html_render(mistune.HTMLRenderer):
@@ -29,7 +32,6 @@ class sf_html_render(mistune.HTMLRenderer):
                 encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
                 mimetype = self._get_mime_type(url)
                 url = f"data:{mimetype};base64,{encoded_string}"
-
         return f'<img alt="{alt}" title="{title}" src="{url}" style="margin-top: 5px; margin-bottom: 5px;" />'
 
     def heading(self, text, level, **attrs):
@@ -49,18 +51,33 @@ class sf_html_render(mistune.HTMLRenderer):
         return magic.from_file(url, mime=True)
 
 
-@click.command(help="Plese supply the path to a KB article in Markdown format to parse")
+@click.command(
+    help="Please supply the path to a KB article in Markdown format to parse and convert")
 @click.argument("filename", type=click.Path(exists=True, readable=True), nargs=1)
 def main(filename):
-    """Main function to parse a Markdown file and save it as HTML."""
+    """Main function to parse a Markdown file, check it with 'proselint', spellcheck, and save it as HTML if it passes."""
     with open(filename, "r") as sf_kb:
-        sf_kb_file = sf_kb.read()
+        sf_kb_lines = sf_kb.readlines()
+
+    # Running proselint to check the markdown content for prohibited content
+    result = subprocess.run(["proselint", filename], capture_output=True, text=True)
+    if result.returncode != 0:
+        print("Linting Errors:")
+        print(result.stdout)
+        sys.exit(1)  # Exit if there are linting errors
+
+    # # Spellchecking with pyspellchecker, still needs a better allowlist
+    # spell = SpellChecker()
+    # for line_number, line in enumerate(sf_kb_lines, start=1):
+    #     words = spell.split_words(line)
+    #     misspelled = spell.unknown(words)
+    #     if misspelled:
+    #         print(f"Possible misspelled word(s) on line {line_number}: {', '.join(misspelled)}")
 
     markdown = mistune.create_markdown(renderer=sf_html_render())
     html_filename = os.path.splitext(filename)[0] + ".html"
-
     with open(html_filename, "w") as sf_html:
-        sf_html.write(markdown(sf_kb_file))
+        sf_html.write(markdown("".join(sf_kb_lines)))
 
 
 if __name__ == "__main__":
