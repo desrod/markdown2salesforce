@@ -3,5 +3,6 @@ black
 isort
 pyflakes
 click
+proselint==0.13.0
 puremagic==1.21
 pyspellchecker==0.8.1
