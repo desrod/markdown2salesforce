@@ -70,12 +70,12 @@ def main(filename, lint):
 
         # Spellchecking with pyspellchecker, still needs a better allowlist for 
         # technical industry words (eg: DHCP, br0, LXD and others)
-        spell = SpellChecker()
-        for line_number, line in enumerate(sf_kb_lines, start=1):
-            words = spell.split_words(line)
-            misspelled = spell.unknown(words)
-            if misspelled:
-                print(f"Possible misspelled word(s) on line {line_number}: {', '.join(misspelled)}")
+        # spell = SpellChecker()
+        # for line_number, line in enumerate(sf_kb_lines, start=1):
+        #     words = spell.split_words(line)
+        #     misspelled = spell.unknown(words)
+        #     if misspelled:
+        #         print(f"Possible misspelled word(s) on line {line_number}: {', '.join(misspelled)}")
 
     markdown = mistune.create_markdown(renderer=sf_html_render())
     html_filename = os.path.splitext(filename)[0] + ".html"
