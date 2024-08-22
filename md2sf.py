@@ -44,6 +44,27 @@ class sf_html_render(mistune.HTMLRenderer):
         info = info.strip() if info is not None else ""
         return '<pre class="ckeditor_codeblock">' + escape(code) + "</pre>\n"
 
+    def list(self, body, ordered, **attrs):
+        """Override to render lists in HTML."""
+        tag = "ol" if ordered else "ul"
+        return (
+            f'<{tag} style="list-style-type:disc;margin-left:20px;">\n{body}</{tag}>\n'
+        )
+
+    def list_item(self, text, **attrs):
+        """Override to render list items in HTML."""
+        return f"<li>{text}</li>\n"
+
+    def link(self, link, text=None, title=None, **kwargs):
+        """Override to handle links, especially for TOC."""
+        if link is None:
+            link = ""
+        if text is None:
+            text = link
+
+        title_attr = f' title="{escape(title)}"' if title else ""
+        return f'<a href="{escape(link)}"{title_attr}>{escape(text)}</a>'
+
     def _get_mime_type(self, url):
         """Lazy-load magic here since it's only used once, faster import loading"""
         import puremagic as magic
@@ -51,10 +72,9 @@ class sf_html_render(mistune.HTMLRenderer):
         return magic.from_file(url, mime=True)
 
 
-@click.command(
-    help="Please supply the path to a KB article in Markdown format to parse and convert")
+@click.command(help="Please supply the path to a KB article in Markdown format to parse and convert")
 @click.argument("filename", type=click.Path(exists=True, readable=True), nargs=1)
-@click.option('--lint', is_flag=True, help="Enable linting checks with proselint and spellchecker")
+@click.option("--lint", is_flag=True, help="Enable linting checks with proselint and spellchecker")
 def main(filename, lint):
     """Main function to parse a Markdown file, check it with 'proselint', spellcheck, and save it as HTML if it passes."""
     with open(filename, "r") as sf_kb:
@@ -68,7 +88,7 @@ def main(filename, lint):
             print(result.stdout)
             sys.exit(1)  # Exit if there are linting errors
 
-        # Spellchecking with pyspellchecker, still needs a better allowlist for 
+        # Spellchecking with pyspellchecker, still needs a better allowlist for
         # technical industry words (eg: DHCP, br0, LXD and others)
         # spell = SpellChecker()
         # for line_number, line in enumerate(sf_kb_lines, start=1):
