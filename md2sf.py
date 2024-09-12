@@ -18,8 +18,8 @@ class sf_html_render(mistune.HTMLRenderer):
     """Custom renderer for converting Markdown to Salesforce's Knowledge system HTML format."""
 
     def codespan(self, text):
-        """Override for `code` span with specific style."""
-        return '<code style="font-size:1em;color:#00f;">' + escape(text) + "</code>"
+        """Override for inline `code` style to use bold text per KB template."""
+        return '<strong>' + escape(text) + "</strong>"
 
     def paragraph(self, text):
         """Override for paragraph to maintain standard HTML paragraph tagging."""
@@ -34,11 +34,6 @@ class sf_html_render(mistune.HTMLRenderer):
                 url = f"data:{mimetype};base64,{encoded_string}"
         return f'<img alt="{alt}" title="{title}" src="{url}" style="margin-top: 5px; margin-bottom: 5px;" />'
 
-    def heading(self, text, level, **attrs):
-        """Override for headings to convert them into bold text paragraphs as per what SF needs."""
-        margin_style = "margin-top: 15px;" if level == 1 else ""
-        return f'<p style="{margin_style}"><b>{text}</b></p>\n'
-
     def block_code(self, code, info=None):
         """Override for `code` blocks to use custom SF page styles."""
         info = info.strip() if info is not None else ""
@@ -48,7 +43,7 @@ class sf_html_render(mistune.HTMLRenderer):
         """Override to render lists in HTML."""
         tag = "ol" if ordered else "ul"
         return (
-            f'<{tag} style="list-style-type:disc;margin-left:20px;">\n{body}</{tag}>\n'
+            f'<{tag}>\n{body}</{tag}>\n'
         )
 
     def list_item(self, text, **attrs):
