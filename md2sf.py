@@ -47,8 +47,9 @@ class sf_html_render(mistune.HTMLRenderer):
     def list(self, body, ordered, **attrs):
         """Override to render lists in HTML."""
         tag = "ol" if ordered else "ul"
+        style = "list-style-type:disc;" if tag == "ul" else ""
         return (
-            f'<{tag} style="list-style-type:disc;margin-left:20px;">\n{body}</{tag}>\n'
+            f'<{tag} style="{style}margin-left:20px;">\n{body}</{tag}>\n'
         )
 
     def list_item(self, text, **attrs):
