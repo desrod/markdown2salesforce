@@ -4,8 +4,8 @@
 // @description  Web'ify md2sf: Convert raw Markdown to Salesforce-friendly HTML
 // @version      2025.11.01.04
 // @author       setuid@gmail.com
-// @updateURL    https://github.com/desrod/markdown2salesforce/raw/master/md2sfweb.js
-// @downloadURL  https://github.com/desrod/markdown2salesforce/raw/master/md2sfweb.js
+// @updateURL    https://raw.githubusercontent.com/desrod/markdown2salesforce/refs/heads/main/md2sfweb.js
+// @downloadURL  https://raw.githubusercontent.com/desrod/markdown2salesforce/refs/heads/main/md2sfweb.js
 // @match        https://*.lightning.force.com/*
 // @match        https://*.my.salesforce.com/*
 // @match        https://*.salesforce-sites.com/*
