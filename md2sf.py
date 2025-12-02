@@ -21,7 +21,7 @@ class sf_html_render(mistune.HTMLRenderer):
         """Override for `code` span with specific style."""
         return '<code style="font-size:1em;color:#00f;">' + escape(text) + "</code>"
 
-    def paragraph(self, text):
+    def paragraph(self, text: str) -> str:
         """Override for paragraph to maintain standard HTML paragraph tagging."""
         return "<p>" + text + "</p>\n"
 
@@ -36,7 +36,7 @@ class sf_html_render(mistune.HTMLRenderer):
 
     def heading(self, text, level, **attrs):
         """Override for headings to convert them into bold text paragraphs as per what SF needs."""
-        margin_style = "margin-top: 15px;" if level == 1 else ""
+        margin_style = f"margin-top: {5 * level}px;"
         return f'<p style="{margin_style}"><b>{text}</b></p>\n'
 
     def block_code(self, code, info=None):
