@@ -1,4 +1,4 @@
-mistune==3.0.2
+mistune==3.3.0
 black
 isort
 pyflakes
