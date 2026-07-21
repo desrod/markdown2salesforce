@@ -1,8 +1,6 @@
-mistune==3.0.2
 black
 isort
 pyflakes
 click
+markdown-it-py==4.2.0
 proselint==0.13.0
-puremagic==1.21
-pyspellchecker==0.8.1
