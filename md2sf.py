@@ -28,20 +28,21 @@ def render_fence_sf(self, tokens, idx, options, env):
 
 
 @click.command(help="Please supply the path to your .md file to convert to HTML")
-@click.argument("filename", type=click.Path(exists=True, readable=True), nargs=1)
-@click.option(
-    "--lint", is_flag=True, help="Enable linting checks with proselint and spellchecker"
-)
+@click.argument("filename", type=click.Path(exists=True, readable=True, dir_okay=False), nargs=1)
+@click.option("--lint", is_flag=True, help="Enable linting checks with proselint")
 def main(filename, lint):
-    with open(filename, "r") as sf_kb:
+    with open(filename, "r", encoding="utf-8") as sf_kb:
         raw_markdown = sf_kb.read()
 
     if lint:
-        result = subprocess.run(["proselint", filename], capture_output=True, text=True)
-        if result.returncode != 0:
-            print("Linting Errors:")
-            print(result.stdout)
-            sys.exit(1)
+            try:
+                result = subprocess.run(["proselint", filename], capture_output=True, text=True)
+            except FileNotFoundError:
+                raise click.ClickException("proselint is not installed (pip install proselint)")
+            if result.returncode != 0:
+                click.echo("Linting Errors:", err=True)
+                click.echo(result.stdout, err=True)
+                sys.exit(1)
 
     markdown = MarkdownIt()
     markdown.add_render_rule("fence", render_fence_sf)
@@ -49,7 +50,7 @@ def main(filename, lint):
     html_content = markdown.render(raw_markdown)
     html_filename = os.path.splitext(filename)[0] + ".html"
 
-    with open(html_filename, "w") as sf_html:
+    with open(html_filename, "w", encoding="utf-8") as sf_html:
         sf_html.write(html_content)
 
 
