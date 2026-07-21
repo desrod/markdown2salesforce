@@ -33,7 +33,12 @@ def render_fence_sf(self, tokens, idx, options, env):
     "--lint", is_flag=True, help="Enable linting checks with proselint and spellchecker"
 )
 def main(filename, lint):
-    with open(filename, "r") as sf_kb:
+    safe_dir = os.path.realpath(os.getcwd())
+    real_filename = os.path.realpath(filename)
+    if not real_filename.startswith(safe_dir + os.sep):
+        raise click.BadParameter(f"File must be within the current directory: {safe_dir}")
+
+    with open(real_filename, "r") as sf_kb:
         raw_markdown = sf_kb.read()
 
     if lint:
