@@ -44,7 +44,7 @@ def main(filename, lint):
                 click.echo(result.stdout, err=True)
                 sys.exit(1)
 
-    markdown = MarkdownIt()
+    markdown = MarkdownIt("gfm-like")
     markdown.add_render_rule("fence", render_fence_sf)
 
     html_content = markdown.render(raw_markdown)
